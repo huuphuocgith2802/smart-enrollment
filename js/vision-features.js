@@ -207,15 +207,32 @@
       const liveCart = window.SmartEnrollment.getCart();
       if (liveCart && liveCart.length > 0) {
         currentCart = liveCart;
-        currentTotalCredits = window.SmartEnrollment.getTotalCredits?.() || currentTotalCredits;
-        currentTotalTuition = window.SmartEnrollment.getTotalTuition?.() || currentTotalTuition;
       }
     }
 
-    // Kiểm tra giỏ hàng rỗng
+    // Nếu currentCart vẫn rỗng, thử đọc từ LocalStorage
+    if (!currentCart || currentCart.length === 0) {
+      try {
+        const saved = localStorage.getItem('smart_enrollment_cart_25ct111');
+        if (saved) {
+          currentCart = JSON.parse(saved);
+        }
+      } catch (e) {
+        currentCart = [];
+      }
+    }
+
+    // Luôn tính toán lại trực tiếp từ mảng currentCart để không bao giờ bị 0 tín chỉ
+    const computedCredits = (currentCart || []).reduce((sum, c) => sum + (Number(c.credits) || 0), 0);
+    const computedTuition = (currentCart || []).reduce((sum, c) => sum + (Number(c.tuition) || 0), 0);
     const totalEl = document.getElementById('total-credits');
     const creditsFromDom = totalEl ? parseInt(totalEl.textContent || '0', 10) : 0;
-    if ((!currentCart || currentCart.length === 0) && creditsFromDom === 0) {
+
+    currentTotalCredits = computedCredits || creditsFromDom || currentTotalCredits || (window.SmartEnrollment?.getTotalCredits?.()) || 0;
+    currentTotalTuition = computedTuition || currentTotalTuition || (window.SmartEnrollment?.getTotalTuition?.()) || 0;
+
+    // Kiểm tra giỏ hàng rỗng
+    if ((!currentCart || currentCart.length === 0) && currentTotalCredits === 0) {
       alert('🛒 Giỏ đăng ký hiện đang trống! Vui lòng chọn ít nhất 1 môn học trước khi xác nhận.');
       return;
     }
@@ -384,6 +401,10 @@
     btnConfirmPayEl.disabled = true;
     btnConfirmPayEl.innerHTML = '⏳ Đang xác thực giao dịch...';
 
+    // Đảm bảo số tín chỉ và học phí được lưu trữ chính xác từ giỏ hàng hiện tại
+    const paidCredits = currentTotalCredits || (currentCart || []).reduce((sum, c) => sum + (Number(c.credits) || 0), 0) || parseInt(document.getElementById('total-credits')?.textContent || '0', 10);
+    const paidTuition = currentTotalTuition || (currentCart || []).reduce((sum, c) => sum + (Number(c.tuition) || 0), 0);
+
     setTimeout(() => {
       // Ẩn nút thanh toán
       btnConfirmPayEl.style.display = 'none';
@@ -408,20 +429,23 @@
                 <span>Trạng thái:</span> <strong style="color: var(--success);">ĐÃ HOÀN TẤT (PAID)</strong>
               </div>
               <div class="receipt-meta-item">
-                <span>Số tín chỉ:</span> <strong>${currentTotalCredits} TC</strong>
+                <span>Số tín chỉ:</span> <strong>${paidCredits} TC</strong>
               </div>
               <div class="receipt-meta-item">
-                <span>Số tiền đã thanh toán:</span> <strong style="color: var(--primary);">${formatCurrencyVND(currentTotalTuition)}</strong>
+                <span>Số tiền đã thanh toán:</span> <strong style="color: var(--primary);">${formatCurrencyVND(paidTuition)}</strong>
               </div>
             </div>
           </div>
 
-          <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+          <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
             <button type="button" class="btn btn-primary" id="btn-print-receipt">
               🖨️ In Biên Lai Xác Nhận
             </button>
+            <button type="button" class="btn btn-success" id="btn-finish-keep-cart">
+              ✓ Hoàn Tất & Xem Kế Hoạch
+            </button>
             <button type="button" class="btn btn-secondary" id="btn-finish-enrollment">
-              ✓ Hoàn Tất & Làm Mới Giỏ
+              🔄 Làm Mới Giỏ Hàng
             </button>
           </div>
         </div>
@@ -432,6 +456,14 @@
       if (btnPrint) {
         btnPrint.addEventListener('click', () => {
           window.print();
+        });
+      }
+
+      // Nút hoàn tất nhưng giữ nguyên kế hoạch trên màn hình chính
+      const btnKeep = document.getElementById('btn-finish-keep-cart');
+      if (btnKeep) {
+        btnKeep.addEventListener('click', () => {
+          closeCheckoutModal();
         });
       }
 
