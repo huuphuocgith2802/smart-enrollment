@@ -203,10 +203,12 @@
     if (!checkoutModalEl) return;
 
     // 1. Kiểm tra giỏ hàng rỗng
-    if (!currentCart || currentCart.length === 0) {
-      alert('🛒 Giỏ đăng ký hiện đang trống! Vui lòng chọn ít nhất 1 môn học trước khi xác nhận.');
-      return;
-    }
+const currentCredits = parseInt(document.getElementById('total-credits')?.textContent || '0', 10);
+
+if (currentCredits === 0) {
+    alert('🛒 Giỏ đăng ký hiện đang trống! Vui lòng chọn ít nhất 1 môn học trước khi xác nhận.');
+    return;
+}
 
     // 2. Nhắc nhở nếu đang trùng lịch học
     if (hasScheduleConflict) {
