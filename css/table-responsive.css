@@ -1,0 +1,840 @@
+/**
+ * ==============================================================================
+ * DỰ ÁN CUỐI KỲ: THIẾT KẾ WEB - LỚP 25CT111
+ * ĐỀ TÀI 2.1.2: CỔNG ĐĂNG KÝ MÔN HỌC THÔNG MINH (SMART ENROLLMENT PORTAL)
+ * FILE: css/table-responsive.css
+ * PHỤ TRÁCH: Nguyễn Tấn Điền (MSSV: 125000260 - Thành viên nhóm)
+ * MÔ TẢ: Bảng môn học đã chọn, thanh tiến độ tín chỉ mượt mà, khối cảnh báo
+ *        thông minh (trùng lịch, môn tiên quyết), modal thanh toán trực tuyến
+ *        và hệ thống Responsive chuyển đổi bảng sang Card dọc trên Mobile.
+ * ==============================================================================
+ */
+
+/* ==========================================================================
+   1. ĐỒNG BỘ HỆ BIẾN THIẾT KẾ THEO YÊU CẦU ĐỒ ÁN (MAPPING TỪ VARIABLES.CSS)
+   ========================================================================== */
+:root {
+  --primary: var(--color-primary, #1e40af);
+  --primary-hover: var(--color-primary-hover, #1d4ed8);
+  --primary-light: var(--color-primary-light, #eff6ff);
+  --secondary: var(--color-secondary, #0f766e);
+  --secondary-hover: var(--color-secondary-hover, #115e59);
+  --secondary-light: var(--color-secondary-light, #f0fdfa);
+  --success: var(--color-success, #16a34a);
+  --success-bg: var(--color-success-bg, #f0fdf4);
+  --warning: var(--color-warning, #ea580c);
+  --warning-bg: var(--color-warning-bg, #fff7ed);
+  --danger: var(--color-danger, #dc2626);
+  --danger-bg: var(--color-danger-bg, #fef2f2);
+  --bg-body: var(--color-bg-page, #f8fafc);
+  --bg-card: var(--color-bg-surface, #ffffff);
+  --text-main: var(--color-text-main, #0f172a);
+  --text-muted: var(--color-text-muted, #475569);
+  --border-color: var(--color-border, #e2e8f0);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --transition: 0.25s ease-in-out;
+}
+
+/* ==========================================================================
+   2. KHUNG GIỎ ĐĂNG KÝ (#ENROLLMENT-CART) - CARD CHUYÊN NGHIỆP & STICKY DESKTOP
+   ========================================================================== */
+#enrollment-cart,
+.selected-panel {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+  transition: box-shadow var(--transition);
+}
+
+#enrollment-cart:hover,
+.selected-panel:hover {
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+}
+
+/* ==========================================================================
+   3. THANH TIẾN ĐỘ TÍN CHỈ (CREDIT PROGRESS BAR) TRỰC QUAN & MƯỢT MÀ
+   - Mặc định: Xanh dương chủ đạo (--primary)
+   - >= 20 TC: Đổi sang màu cam cảnh báo (--warning) qua class .is-warning
+   - = 25 TC: Đổi sang màu đỏ chạm ngưỡng tối đa (--danger) qua class .is-full
+   ========================================================================== */
+.credit-progress-container {
+  margin: 1.25rem 0 1rem 0;
+  background-color: var(--bg-body);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.credit-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.credit-highlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-family: var(--font-family-mono, monospace);
+  padding: 2px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(30, 64, 175, 0.2);
+  font-size: 0.875rem;
+}
+
+.credit-highlight strong {
+  font-size: 1rem;
+  color: var(--primary);
+}
+
+.credit-progress-track {
+  width: 100%;
+  height: 12px;
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.credit-progress-fill,
+.credit-progress-bar,
+#credit-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #3b82f6 0%, var(--primary) 100%);
+  border-radius: 9999px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background var(--transition);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Trạng thái cận tải (>= 20 tín chỉ) */
+.credit-progress-fill.is-warning,
+.credit-progress-bar.is-warning,
+#credit-progress-bar.is-warning {
+  background: linear-gradient(90deg, #f59e0b 0%, var(--warning) 100%);
+}
+
+/* Trạng thái chạm mức tối đa (= 25 tín chỉ) */
+.credit-progress-fill.is-full,
+.credit-progress-bar.is-full,
+#credit-progress-bar.is-full {
+  background: linear-gradient(90deg, #ef4444 0%, var(--danger) 100%);
+}
+
+.credit-status-caption,
+#credit-status-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   4. CẢNH BÁO THÔNG MINH (.ALERT-BOX & .SMART-ALERTS)
+   - Khối cảnh báo trùng lịch: Đỏ rực (--danger / --danger-bg)
+   - Khối lưu ý môn tiên quyết: Vàng/Cam (--warning / --warning-bg)
+   ========================================================================== */
+.alert-container,
+.smart-alerts-container,
+.smart-alerts,
+#smart-alerts {
+  margin-bottom: 1rem;
+}
+
+.alert-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  animation: slideInDown 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-box .alert-icon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.alert-box .alert-content {
+  flex: 1;
+}
+
+.alert-box .alert-title {
+  font-weight: 700;
+  margin-bottom: 2px;
+  display: block;
+}
+
+/* Cảnh báo trùng lịch học (Màu đỏ) */
+.alert-box.alert-conflict {
+  background-color: var(--danger-bg);
+  border: 1px solid var(--danger);
+  border-left: 4px solid var(--danger);
+  color: #991b1b;
+}
+
+.alert-box.alert-conflict .alert-title {
+  color: var(--danger);
+}
+
+.alert-box.alert-conflict ul {
+  margin: 6px 0 0 16px;
+  padding: 0;
+}
+
+.alert-box.alert-conflict li {
+  margin-bottom: 3px;
+}
+
+/* Lưu ý môn tiên quyết (Màu vàng / cam) */
+.alert-box.alert-prereq {
+  background-color: var(--warning-bg);
+  border: 1px solid var(--warning);
+  border-left: 4px solid var(--warning);
+  color: #9a3412;
+}
+
+.alert-box.alert-prereq .alert-title {
+  color: var(--warning);
+}
+
+.alert-box.alert-prereq ul {
+  margin: 6px 0 0 16px;
+  padding: 0;
+}
+
+.alert-box.alert-prereq li {
+  margin-bottom: 3px;
+}
+
+/* ==========================================================================
+   5. THIẾT KẾ BẢNG MÔN ĐÃ CHỌN (.SELECTED-TABLE / .SELECTED-COURSES-TABLE)
+   - Header nền --secondary hoặc --primary-light sang trọng
+   - Sọc ngựa vằn (zebra striping)
+   - Hiệu ứng hover từng dòng
+   - .credit-badge tròn/pill nổi bật
+   - Nút .btn-remove đỏ gọn gàng
+   ========================================================================== */
+.table-responsive-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  margin-bottom: 1.25rem;
+}
+
+.selected-table,
+.selected-courses-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+/* Header bảng */
+.selected-table thead,
+.selected-courses-table thead {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-hover) 100%);
+  color: #ffffff;
+}
+
+.selected-table thead th,
+.selected-courses-table thead th {
+  padding: 12px 14px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.selected-table thead th.text-center,
+.selected-courses-table thead th.text-center {
+  text-align: center;
+}
+
+.selected-table thead th.text-right,
+.selected-courses-table thead th.text-right {
+  text-align: right;
+}
+
+/* Từng dòng dữ liệu trong tbody */
+.selected-table tbody tr,
+.selected-courses-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition);
+}
+
+/* Sọc ngựa vằn */
+.selected-table tbody tr:nth-child(even),
+.selected-courses-table tbody tr:nth-child(even) {
+  background-color: rgba(248, 250, 252, 0.7);
+}
+
+/* Hover từng dòng */
+.selected-table tbody tr:hover,
+.selected-courses-table tbody tr:hover {
+  background-color: var(--primary-light);
+}
+
+.selected-table tbody td,
+.selected-courses-table tbody td {
+  padding: 12px 14px;
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.selected-table tbody td.text-center,
+.selected-courses-table tbody td.text-center {
+  text-align: center;
+}
+
+.selected-table tbody td.text-right,
+.selected-courses-table tbody td.text-right {
+  text-align: right;
+}
+
+/* Huy hiệu tín chỉ (.credit-badge) nổi bật */
+.credit-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid rgba(30, 64, 175, 0.25);
+  font-family: var(--font-family-mono, monospace);
+}
+
+/* Nút xóa (.btn-remove / .btn-remove-course) */
+.btn-remove,
+.btn-remove-course {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background-color: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-size: 0.875rem;
+}
+
+.btn-remove:hover,
+.btn-remove-course:hover {
+  background-color: var(--danger);
+  color: #ffffff;
+  border-color: var(--danger);
+  transform: scale(1.08);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.25);
+}
+
+/* Trạng thái bảng rỗng (Empty state) */
+.empty-state-row td,
+.empty-state-cell {
+  text-align: center;
+  padding: 2.5rem 1rem !important;
+  color: var(--text-muted);
+}
+
+.empty-cart-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.empty-cart-message .empty-icon {
+  font-size: 2.25rem;
+  opacity: 0.7;
+}
+
+.empty-cart-message p {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.empty-cart-message small {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+
+/* ==========================================================================
+   6. TÓM TẮT HỌC PHÍ & NÚT XÁC NHẬN ĐĂNG KÝ
+   ========================================================================== */
+.selected-summary-card {
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-body) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.tuition-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.875rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.tuition-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.tuition-value,
+#total-tuition {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--primary);
+  font-family: var(--font-family-mono, monospace);
+  letter-spacing: -0.02em;
+}
+
+.checkout-action-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-lg {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+}
+
+/* ==========================================================================
+   7. MODAL THANH TOÁN HIỆN ĐẠI (.MODAL-OVERLAY / #CHECKOUT-MODAL)
+   - Căn giữa màn hình hoàn hảo
+   - Hiệu ứng Backdrop Blur mượt mà
+   - Animation Pop-in hiện đại
+   ========================================================================== */
+.modal-overlay,
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* Khi Modal mở */
+.modal-overlay.is-open,
+.modal-backdrop.is-open,
+.modal-overlay.show,
+.modal-backdrop.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.92) translateY(12px);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-overlay.is-open .modal-dialog,
+.modal-backdrop.is-open .modal-dialog,
+.modal-overlay.show .modal-dialog,
+.modal-backdrop.show .modal-dialog {
+  transform: scale(1) translateY(0);
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #172554 0%, var(--primary) 100%);
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-title-wrap .modal-icon {
+  font-size: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.btn-close-modal {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background var(--transition);
+}
+
+.btn-close-modal:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  background-color: var(--bg-body);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Các thành phần chi tiết bên trong Modal Receipt */
+.receipt-meta-box {
+  background-color: var(--primary-light);
+  border: 1px solid rgba(30, 64, 175, 0.15);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: 1.25rem;
+  font-size: 0.8125rem;
+}
+
+.receipt-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+}
+
+.receipt-meta-item strong {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.modal-table-summary {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  margin-bottom: 1.25rem;
+}
+
+.modal-table-summary th {
+  background-color: #f1f5f9;
+  color: var(--text-muted);
+  padding: 8px 10px;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-table-summary td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.receipt-total-box {
+  background-color: #f8fafc;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.payment-methods-group {
+  margin-top: 1rem;
+}
+
+.payment-methods-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.payment-methods-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.payment-method-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: var(--bg-card);
+  transition: all var(--transition);
+}
+
+.payment-method-card:hover,
+.payment-method-card.is-selected {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+/* Trạng thái thanh toán thành công trong Modal */
+.payment-success-banner {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.payment-success-icon {
+  font-size: 3.5rem;
+  color: var(--success);
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  animation: bounceIn 0.5s ease;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.1); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================================================
+   8. RESPONSIVE THIẾT KẾ CHO THIẾT BỊ DI ĐỘNG (@MEDIA MAX-WIDTH: 640PX)
+   - Tắt tính năng sticky trên màn hình nhỏ
+   - Chuyển đổi toàn bộ các dòng <tr> thành dạng thẻ dọc (Card-based table)
+   - Sử dụng td::before { content: attr(data-label); } để chú giải nhãn
+   - KHÔNG BAO GIỜ bị tràn ngang màn hình (No Horizontal Overflow)
+   ========================================================================== */
+@media (max-width: 640px) {
+  /* Tắt sticky trên mobile */
+  #enrollment-cart,
+  .selected-panel {
+    position: static;
+    top: auto;
+    padding: 1rem;
+  }
+
+  .table-responsive-wrapper {
+    border: none;
+    background: transparent;
+    overflow-x: visible;
+  }
+
+  /* Chuyển toàn bộ cấu trúc bảng thành dạng khối Block */
+  .selected-table,
+  .selected-courses-table {
+    display: block;
+    width: 100%;
+    border: none;
+  }
+
+  /* Ẩn hoàn toàn header của bảng trên mobile */
+  .selected-table thead,
+  .selected-courses-table thead {
+    display: none;
+  }
+
+  .selected-table tbody,
+  .selected-courses-table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  /* Mỗi dòng <tr> trở thành một thẻ (Card) dọc hoàn chỉnh */
+  .selected-table tbody tr,
+  .selected-courses-table tbody tr {
+    display: block;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition), border-color var(--transition);
+  }
+
+  .selected-table tbody tr:hover,
+  .selected-courses-table tbody tr:hover {
+    background-color: var(--bg-card);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  /* Dòng thông báo giỏ rỗng trên mobile */
+  .selected-table tbody tr.empty-state-row,
+  .selected-courses-table tbody tr.empty-state-row {
+    padding: 2rem 1rem;
+  }
+
+  .selected-table tbody tr.empty-state-row td,
+  .selected-courses-table tbody tr.empty-state-row td {
+    display: block;
+    border: none;
+    padding: 0;
+  }
+
+  .selected-table tbody tr.empty-state-row td::before,
+  .selected-courses-table tbody tr.empty-state-row td::before {
+    display: none;
+  }
+
+  /* Từng ô <td> hiển thị theo hàng ngang Flexbox: Nhãn trái, Giá trị phải */
+  .selected-table tbody td,
+  .selected-courses-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px dashed var(--border-color);
+    text-align: right;
+    font-size: 0.875rem;
+  }
+
+  /* Ô thao tác cuối cùng không có đường kẻ dưới */
+  .selected-table tbody td:last-child,
+  .selected-courses-table tbody td:last-child {
+    border-bottom: none;
+    padding-top: 10px;
+    justify-content: flex-end;
+  }
+
+  /* Chèn nhãn từ thuộc tính data-label qua td::before */
+  .selected-table tbody td::before,
+  .selected-courses-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Tinh chỉnh nút xóa trên mobile để dễ bấm bằng ngón tay */
+  .btn-remove,
+  .btn-remove-course {
+    width: 100%;
+    height: 38px;
+    gap: 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .btn-remove::after,
+  .btn-remove-course::after {
+    content: "Xóa khỏi danh sách";
+    font-weight: 600;
+    font-size: 0.8125rem;
+  }
+
+  /* Modal responsive trên màn hình điện thoại */
+  .modal-dialog {
+    max-height: 94vh;
+    border-radius: var(--radius-md);
+  }
+
+  .receipt-meta-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .payment-methods-list {
+    grid-template-columns: 1fr;
+  }
+}

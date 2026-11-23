@@ -527,7 +527,7 @@
       <!-- Phụ trách: Nguyễn Tấn Điền (MSSV: 125000260)                      -->
       <!-- File làm việc: css/table-responsive.css & js/vision-features.js  -->
       <!-- ================================================================ -->
-      <section class="portal-panel selected-panel" aria-labelledby="selected-heading">
+      <aside id="enrollment-cart" class="portal-panel selected-panel" aria-labelledby="selected-heading">
         <div class="portal-panel-header">
           <h2 id="selected-heading" class="portal-panel-title">
             <span class="title-icon">📋</span> Kế Hoạch Học Tập Đã Chọn
@@ -561,7 +561,7 @@
 
           <!-- Văn bản trạng thái chi tiết -->
           <div id="credit-status-text" class="credit-status-caption">
-            Chưa có môn học nào được đăng ký (Hạn mức: 25 TC).
+            Chưa có môn học nào được đăng ký (Hạn mức tối đa: 25 TC).
           </div>
         </div>
 
@@ -573,14 +573,14 @@
 
         <!-- Bảng danh sách các môn đã chọn (Responsive Table) -->
         <div class="table-responsive-wrapper">
-          <table class="selected-courses-table">
+          <table class="selected-courses-table selected-table">
             <thead>
               <tr>
-                <th scope="col">Mã môn</th>
-                <th scope="col">Tên môn học</th>
-                <th scope="col" class="text-center">Số TC</th>
-                <th scope="col" class="text-right">Học phí</th>
-                <th scope="col" class="text-center">Thao tác</th>
+                <th scope="col" style="width: 15%;">Mã môn</th>
+                <th scope="col" style="width: 35%;">Tên môn học</th>
+                <th scope="col" class="text-center" style="width: 12%;">Số TC</th>
+                <th scope="col" style="width: 26%;">Lịch học</th>
+                <th scope="col" class="text-center" style="width: 12%;">Thao tác</th>
               </tr>
             </thead>
             <tbody id="selected-courses-body">
@@ -612,26 +612,34 @@
           </div>
         </div>
 
-        <!-- Modal Xác nhận thanh toán & Phiếu đăng ký (Phụ trách: Điền) -->
-        <div id="checkout-modal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+        <!-- ================================================================ -->
+        <!-- [ĐIỀN MODAL - START] MODAL THANH TOÁN & PHIẾU ĐĂNG KÝ             -->
+        <!-- ================================================================ -->
+        <div id="checkout-modal" class="modal-backdrop modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h3 id="modal-title" class="modal-title">🎓 Phiếu Đăng Ký Môn Học Chính Thức</h3>
-                <button type="button" class="btn-close-modal" data-close-modal aria-label="Đóng">&times;</button>
+                <div class="modal-title-wrap">
+                  <span class="modal-icon">🎓</span>
+                  <h3 id="modal-title" class="modal-title">Phiếu Đăng Ký & Thanh Toán Môn Học</h3>
+                </div>
+                <button type="button" id="btn-close-modal" class="btn-close-modal" data-close-modal aria-label="Đóng">&times;</button>
               </div>
-              <div class="modal-body" id="checkout-modal-body">
+              <div class="modal-body" id="modal-summary-body">
                 <p>Chi tiết kế hoạch đăng ký môn học và hướng dẫn nộp học phí sẽ hiển thị tại đây.</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-close-modal>Đóng lại</button>
-                <button type="button" class="btn btn-primary" id="btn-modal-print">In Phiếu Đăng Ký</button>
+                <button type="button" id="btn-confirm-pay" class="btn btn-success">
+                  💳 Xác Nhận Thanh Toán
+                </button>
               </div>
             </div>
           </div>
         </div>
+        <!-- [ĐIỀN MODAL - END] -->
 
-      </section>
+      </aside>
       <!-- ================================================================ -->
       <!-- [ĐIỀN - END]                                                     -->
       <!-- ================================================================ -->
