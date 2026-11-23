@@ -202,13 +202,23 @@
   const openCheckoutModal = () => {
     if (!checkoutModalEl) return;
 
-    // 1. Kiểm tra giỏ hàng rỗng
-const currentCredits = parseInt(document.getElementById('total-credits')?.textContent || '0', 10);
+    // 1. Luôn đồng bộ dữ liệu giỏ hàng mới nhất từ window.SmartEnrollment nếu có
+    if (window.SmartEnrollment && typeof window.SmartEnrollment.getCart === 'function') {
+      const liveCart = window.SmartEnrollment.getCart();
+      if (liveCart && liveCart.length > 0) {
+        currentCart = liveCart;
+        currentTotalCredits = window.SmartEnrollment.getTotalCredits?.() || currentTotalCredits;
+        currentTotalTuition = window.SmartEnrollment.getTotalTuition?.() || currentTotalTuition;
+      }
+    }
 
-if (currentCredits === 0) {
-    alert('🛒 Giỏ đăng ký hiện đang trống! Vui lòng chọn ít nhất 1 môn học trước khi xác nhận.');
-    return;
-}
+    // Kiểm tra giỏ hàng rỗng
+    const totalEl = document.getElementById('total-credits');
+    const creditsFromDom = totalEl ? parseInt(totalEl.textContent || '0', 10) : 0;
+    if ((!currentCart || currentCart.length === 0) && creditsFromDom === 0) {
+      alert('🛒 Giỏ đăng ký hiện đang trống! Vui lòng chọn ít nhất 1 môn học trước khi xác nhận.');
+      return;
+    }
 
     // 2. Nhắc nhở nếu đang trùng lịch học
     if (hasScheduleConflict) {
@@ -442,24 +452,46 @@ if (currentCredits === 0) {
   };
 
   /**
+   * Xử lý khi nhận được sự kiện cập nhật giỏ hàng từ cart-logic.js
+   */
+  const handleCartUpdated = (e) => {
+    const detail = e.detail || {};
+    currentCart = detail.cart || (window.SmartEnrollment?.getCart?.()) || [];
+    currentTotalCredits = detail.totalCredits ?? (window.SmartEnrollment?.getTotalCredits?.()) ?? 0;
+    currentTotalTuition = detail.totalTuition ?? (window.SmartEnrollment?.getTotalTuition?.()) ?? 0;
+
+    // Cập nhật cảnh báo trùng lịch & môn tiên quyết
+    updateSmartAlerts(currentCart);
+
+    // Cập nhật trạng thái nút thanh toán
+    if (btnCheckoutEl) {
+      btnCheckoutEl.disabled = currentCart.length === 0;
+    }
+  };
+
+  /**
    * KHỞI TẠO CÁC SỰ KIỆN LẮNG NGHE (EVENT LISTENERS)
    */
   const initEventListeners = () => {
-    // 1. Lắng nghe sự kiện cartUpdated từ cart-logic.js
-    document.addEventListener('cartUpdated', (e) => {
-      const detail = e.detail || {};
-      currentCart = detail.cart || [];
-      currentTotalCredits = detail.totalCredits || 0;
-      currentTotalTuition = detail.totalTuition || 0;
+    // 1. Lắng nghe cả cartUpdated và enrollment:updated từ cart-logic.js
+    document.addEventListener('cartUpdated', handleCartUpdated);
+    document.addEventListener('enrollment:updated', handleCartUpdated);
 
-      // Cập nhật cảnh báo trùng lịch & môn tiên quyết
-      updateSmartAlerts(currentCart);
-
-      // Cập nhật trạng thái nút thanh toán
-      if (btnCheckoutEl) {
-        btnCheckoutEl.disabled = currentCart.length === 0;
+    // Đồng bộ tức thì nếu giỏ hàng đã có dữ liệu từ trước
+    setTimeout(() => {
+      if (window.SmartEnrollment && typeof window.SmartEnrollment.getCart === 'function') {
+        const initialCart = window.SmartEnrollment.getCart();
+        if (initialCart && initialCart.length > 0) {
+          handleCartUpdated({
+            detail: {
+              cart: initialCart,
+              totalCredits: window.SmartEnrollment.getTotalCredits?.() || 0,
+              totalTuition: window.SmartEnrollment.getTotalTuition?.() || 0
+            }
+          });
+        }
       }
-    });
+    }, 50);
 
     // 2. Mở Modal thanh toán khi bấm nút #btn-checkout
     if (btnCheckoutEl) {
