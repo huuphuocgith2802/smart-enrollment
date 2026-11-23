@@ -9,7 +9,7 @@
 
 ## 🌐 1. THÔNG TIN BẢNG DEMO TRỰC TUYẾN
 - **GitHub Repository:** `https://github.com/dinhhuuphuoc-25ct111/smart-enrollment`
-- **Link Demo GitHub Pages:** [https://dinhhuuphuoc-25ct111.github.io/smart-enrollment/]((https://huuphuocgith2802.github.io/smart-enrollment/))
+- **Link Demo GitHub Pages:** ((https://huuphuocgith2802.github.io/smart-enrollment/))
 
 ---
 
