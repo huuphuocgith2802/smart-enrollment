@@ -59,12 +59,12 @@
   <main class="portal-main">
     <div class="portal-layout">
 
-      <!-- ================================================================ -->
+     <!-- ================================================================ -->
       <!-- [PHÁT - START] DANH SÁCH MÔN HỌC & BỘ LỌC TÌM KIẾM               -->
       <!-- Phụ trách: Nguyễn Thành Phát (MSSV: 125000658)                    -->
       <!-- File làm việc: css/catalog.css & js/search-filter.js             -->
       <!-- ================================================================ -->
-      <section class="portal-panel catalog-panel" aria-labelledby="catalog-heading">
+      <section id="course-catalog" class="portal-panel catalog-panel catalog-section" aria-labelledby="catalog-heading">
         <div class="portal-panel-header">
           <h2 id="catalog-heading" class="portal-panel-title">
             <span class="title-icon">📚</span> Danh Mục Môn Học Mở Đăng Ký
@@ -73,46 +73,50 @@
         </div>
 
         <!-- Thanh công cụ tìm kiếm và lọc dữ liệu môn học -->
-        <form id="search-form" class="catalog-search-bar" role="search" onsubmit="event.preventDefault();">
+        <form id="search-form" class="catalog-search-bar" role="search">
           <div class="search-input-wrapper">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon" aria-hidden="true">🔍</span>
             <input 
               type="search" 
               id="search-input" 
-              placeholder="Tìm theo tên môn, mã môn học, giảng viên..." 
+              placeholder="Tìm theo tên môn hoặc mã môn (VD: IT001, Web, AI)..." 
               autocomplete="off"
               aria-label="Tìm kiếm môn học"
             >
           </div>
 
           <div class="filter-controls">
-            <label for="credit-filter" class="filter-label">Số tín chỉ:</label>
+            <label for="credit-filter" class="filter-label">Tín chỉ:</label>
             <select id="credit-filter" class="filter-select" aria-label="Lọc theo số tín chỉ">
-              <option value="all">Tất cả tín chỉ</option>
+              <option value="all">Tất cả</option>
               <option value="2">2 Tín chỉ</option>
               <option value="3">3 Tín chỉ</option>
               <option value="4">4 Tín chỉ</option>
             </select>
+
+            <button type="button" id="reset-filter-btn" class="btn btn-reset-filter" title="Đặt lại bộ lọc">
+              ↺ Đặt lại
+            </button>
           </div>
         </form>
 
         <!-- Thống kê kết quả tìm kiếm -->
         <div class="catalog-summary">
-          <span>Tìm thấy: <strong id="course-count">5</strong> môn học phù hợp</span>
-          <span class="catalog-tip">💡 Nhấp "Đăng ký" để thêm vào kế hoạch học tập</span>
+          <span>Hiển thị: <strong id="course-count">12</strong> / 12 môn học</span>
+          <span class="catalog-tip">💡 Nhấp "Đăng ký môn" để thêm vào kế hoạch học tập</span>
         </div>
 
-        <!-- Khung chứa danh sách thẻ môn học (Bắt sự kiện Event Delegation ở đây) -->
-        <div id="course-list" class="courses-grid">
-          
-          <!-- THẺ MẪU SỐ 1: Đủ 6 thuộc tính data-* bắt buộc -->
+        <!-- Khung chứa danh sách 12 thẻ môn học (Tổng 38 Tín chỉ) -->
+        <div id="course-list" class="courses-grid course-grid">
+
+          <!-- Môn 1: Trùng lịch cặp 1 với IT006 (Thứ 2 Tiết 1-3) -->
           <article 
             class="course-card"
             data-id="IT001"
             data-name="Lập trình Web nâng cao"
             data-credits="3"
             data-prereq="Nhập môn Lập trình (IT000)"
-            data-schedule="Thứ 2 (Tiết 1-3) - Phòng B201"
+            data-schedule="Thứ 2 (Tiết 1-3)"
             data-tuition="1350000"
           >
             <div class="course-card-header">
@@ -121,13 +125,13 @@
             </div>
             <div class="course-card-body">
               <h3 class="course-title">Lập trình Web nâng cao</h3>
-              <p class="course-prereq">
-                <span class="meta-label">Môn tiên quyết:</span> Nhập môn Lập trình (IT000)
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Nhập môn Lập trình (IT000)
               </p>
-              <p class="course-schedule">
+              <p class="course-meta course-schedule">
                 <span class="meta-label">Lịch học:</span> Thứ 2 (Tiết 1-3) - Phòng B201
               </p>
-              <p class="course-tuition">
+              <p class="course-meta course-tuition">
                 <span class="meta-label">Học phí:</span> <strong>1.350.000 ₫</strong>
               </p>
             </div>
@@ -138,14 +142,14 @@
             </div>
           </article>
 
-          <!-- THẺ MẪU SỐ 2: Đủ 6 thuộc tính data-* bắt buộc -->
+          <!-- Môn 2: Trùng lịch cặp 2 với IT007 (Thứ 4 Tiết 4-7) -->
           <article 
             class="course-card"
             data-id="IT002"
             data-name="Cơ sở dữ liệu nâng cao & Big Data"
             data-credits="4"
-            data-prereq="Cơ sở dữ liệu (IT003)"
-            data-schedule="Thứ 4 (Tiết 4-7) - Phòng A105"
+            data-prereq="Cơ sở dữ liệu (IT006)"
+            data-schedule="Thứ 4 (Tiết 4-7)"
             data-tuition="1800000"
           >
             <div class="course-card-header">
@@ -154,13 +158,13 @@
             </div>
             <div class="course-card-body">
               <h3 class="course-title">Cơ sở dữ liệu nâng cao & Big Data</h3>
-              <p class="course-prereq">
-                <span class="meta-label">Môn tiên quyết:</span> Cơ sở dữ liệu (IT003)
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Cơ sở dữ liệu (IT006)
               </p>
-              <p class="course-schedule">
+              <p class="course-meta course-schedule">
                 <span class="meta-label">Lịch học:</span> Thứ 4 (Tiết 4-7) - Phòng A105
               </p>
-              <p class="course-tuition">
+              <p class="course-meta course-tuition">
                 <span class="meta-label">Học phí:</span> <strong>1.800.000 ₫</strong>
               </p>
             </div>
@@ -171,14 +175,14 @@
             </div>
           </article>
 
-          <!-- THẺ BỔ SUNG ĐỂ TEST TÍN CHỈ VÀ NGHIỆP VỤ GIỚI HẠN 25 TC -->
+          <!-- Môn 3 -->
           <article 
             class="course-card"
             data-id="IT003"
             data-name="Trí tuệ Nhân tạo & Học máy"
             data-credits="4"
             data-prereq="Đại số tuyến tính (MA002)"
-            data-schedule="Thứ 3 (Tiết 1-4) - Phòng C302"
+            data-schedule="Thứ 3 (Tiết 1-4)"
             data-tuition="1800000"
           >
             <div class="course-card-header">
@@ -187,13 +191,13 @@
             </div>
             <div class="course-card-body">
               <h3 class="course-title">Trí tuệ Nhân tạo & Học máy</h3>
-              <p class="course-prereq">
-                <span class="meta-label">Môn tiên quyết:</span> Đại số tuyến tính (MA002)
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Đại số tuyến tính (MA002)
               </p>
-              <p class="course-schedule">
+              <p class="course-meta course-schedule">
                 <span class="meta-label">Lịch học:</span> Thứ 3 (Tiết 1-4) - Phòng C302
               </p>
-              <p class="course-tuition">
+              <p class="course-meta course-tuition">
                 <span class="meta-label">Học phí:</span> <strong>1.800.000 ₫</strong>
               </p>
             </div>
@@ -204,13 +208,14 @@
             </div>
           </article>
 
+          <!-- Môn 4 -->
           <article 
             class="course-card"
             data-id="IT004"
             data-name="An toàn & Bảo mật Hệ thống"
             data-credits="3"
-            data-prereq="Mạng máy tính (IT005)"
-            data-schedule="Thứ 5 (Tiết 6-8) - Phòng Lab 4"
+            data-prereq="Mạng máy tính (IT008)"
+            data-schedule="Thứ 5 (Tiết 6-8)"
             data-tuition="1350000"
           >
             <div class="course-card-header">
@@ -219,13 +224,13 @@
             </div>
             <div class="course-card-body">
               <h3 class="course-title">An toàn & Bảo mật Hệ thống</h3>
-              <p class="course-prereq">
-                <span class="meta-label">Môn tiên quyết:</span> Mạng máy tính (IT005)
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Mạng máy tính (IT008)
               </p>
-              <p class="course-schedule">
+              <p class="course-meta course-schedule">
                 <span class="meta-label">Lịch học:</span> Thứ 5 (Tiết 6-8) - Phòng Lab 4
               </p>
-              <p class="course-tuition">
+              <p class="course-meta course-tuition">
                 <span class="meta-label">Học phí:</span> <strong>1.350.000 ₫</strong>
               </p>
             </div>
@@ -236,13 +241,14 @@
             </div>
           </article>
 
+          <!-- Môn 5 -->
           <article 
             class="course-card"
             data-id="IT005"
             data-name="Kiến trúc Phần mềm & DevOps"
             data-credits="3"
             data-prereq="Công nghệ phần mềm (IT007)"
-            data-schedule="Thứ 6 (Tiết 2-4) - Phòng B102"
+            data-schedule="Thứ 6 (Tiết 2-4)"
             data-tuition="1350000"
           >
             <div class="course-card-header">
@@ -251,13 +257,13 @@
             </div>
             <div class="course-card-body">
               <h3 class="course-title">Kiến trúc Phần mềm & DevOps</h3>
-              <p class="course-prereq">
-                <span class="meta-label">Môn tiên quyết:</span> Công nghệ phần mềm (IT007)
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Công nghệ phần mềm (IT007)
               </p>
-              <p class="course-schedule">
+              <p class="course-meta course-schedule">
                 <span class="meta-label">Lịch học:</span> Thứ 6 (Tiết 2-4) - Phòng B102
               </p>
-              <p class="course-tuition">
+              <p class="course-meta course-tuition">
                 <span class="meta-label">Học phí:</span> <strong>1.350.000 ₫</strong>
               </p>
             </div>
@@ -268,6 +274,247 @@
             </div>
           </article>
 
+          <!-- Môn 6: Trùng lịch cặp 1 với IT001 (Thứ 2 Tiết 1-3) -->
+          <article 
+            class="course-card"
+            data-id="IT006"
+            data-name="Cấu trúc Dữ liệu & Giải thuật"
+            data-credits="4"
+            data-prereq="Nhập môn Lập trình (IT000)"
+            data-schedule="Thứ 2 (Tiết 1-3)"
+            data-tuition="1800000"
+          >
+            <div class="course-card-header">
+              <span class="course-code-badge">IT006</span>
+              <span class="course-credits-badge">4 Tín chỉ</span>
+            </div>
+            <div class="course-card-body">
+              <h3 class="course-title">Cấu trúc Dữ liệu & Giải thuật</h3>
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Nhập môn Lập trình (IT000)
+              </p>
+              <p class="course-meta course-schedule">
+                <span class="meta-label">Lịch học:</span> Thứ 2 (Tiết 1-3) - Phòng A204
+              </p>
+              <p class="course-meta course-tuition">
+                <span class="meta-label">Học phí:</span> <strong>1.800.000 ₫</strong>
+              </p>
+            </div>
+            <div class="course-card-footer">
+              <button type="button" class="btn btn-primary btn-enroll" aria-label="Đăng ký môn IT006">
+                + Đăng ký môn
+              </button>
+            </div>
+          </article>
+
+          <!-- Môn 7: Trùng lịch cặp 2 với IT002 (Thứ 4 Tiết 4-7) -->
+          <article 
+            class="course-card"
+            data-id="IT007"
+            data-name="Phát triển Ứng dụng Di động"
+            data-credits="4"
+            data-prereq="Lập trình Hướng đối tượng (IT009)"
+            data-schedule="Thứ 4 (Tiết 4-7)"
+            data-tuition="1800000"
+          >
+            <div class="course-card-header">
+              <span class="course-code-badge">IT007</span>
+              <span class="course-credits-badge">4 Tín chỉ</span>
+            </div>
+            <div class="course-card-body">
+              <h3 class="course-title">Phát triển Ứng dụng Di động</h3>
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Lập trình Hướng đối tượng (IT009)
+              </p>
+              <p class="course-meta course-schedule">
+                <span class="meta-label">Lịch học:</span> Thứ 4 (Tiết 4-7) - Phòng Lab 2
+              </p>
+              <p class="course-meta course-tuition">
+                <span class="meta-label">Học phí:</span> <strong>1.800.000 ₫</strong>
+              </p>
+            </div>
+            <div class="course-card-footer">
+              <button type="button" class="btn btn-primary btn-enroll" aria-label="Đăng ký môn IT007">
+                + Đăng ký môn
+              </button>
+            </div>
+          </article>
+
+          <!-- Môn 8: Không có môn tiên quyết -->
+          <article 
+            class="course-card"
+            data-id="IT008"
+            data-name="Mạng máy tính & Quản trị Hệ thống"
+            data-credits="3"
+            data-prereq="Không có"
+            data-schedule="Thứ 3 (Tiết 6-8)"
+            data-tuition="1350000"
+          >
+            <div class="course-card-header">
+              <span class="course-code-badge">IT008</span>
+              <span class="course-credits-badge">3 Tín chỉ</span>
+            </div>
+            <div class="course-card-body">
+              <h3 class="course-title">Mạng máy tính & Quản trị Hệ thống</h3>
+              <p class="course-meta course-prereq is-none">
+                <span class="meta-label">Tiên quyết:</span> Không có
+              </p>
+              <p class="course-meta course-schedule">
+                <span class="meta-label">Lịch học:</span> Thứ 3 (Tiết 6-8) - Phòng C101
+              </p>
+              <p class="course-meta course-tuition">
+                <span class="meta-label">Học phí:</span> <strong>1.350.000 ₫</strong>
+              </p>
+            </div>
+            <div class="course-card-footer">
+              <button type="button" class="btn btn-primary btn-enroll" aria-label="Đăng ký môn IT008">
+                + Đăng ký môn
+              </button>
+            </div>
+          </article>
+
+          <!-- Môn 9: 2 Tín chỉ, không có môn tiên quyết -->
+          <article 
+            class="course-card"
+            data-id="IT009"
+            data-name="Thiết kế Giao diện UI/UX"
+            data-credits="2"
+            data-prereq="Không có"
+            data-schedule="Thứ 5 (Tiết 1-2)"
+            data-tuition="900000"
+          >
+            <div class="course-card-header">
+              <span class="course-code-badge">IT009</span>
+              <span class="course-credits-badge">2 Tín chỉ</span>
+            </div>
+            <div class="course-card-body">
+              <h3 class="course-title">Thiết kế Giao diện UI/UX</h3>
+              <p class="course-meta course-prereq is-none">
+                <span class="meta-label">Tiên quyết:</span> Không có
+              </p>
+              <p class="course-meta course-schedule">
+                <span class="meta-label">Lịch học:</span> Thứ 5 (Tiết 1-2) - Phòng B305
+              </p>
+              <p class="course-meta course-tuition">
+                <span class="meta-label">Học phí:</span> <strong>900.000 ₫</strong>
+              </p>
+            </div>
+            <div class="course-card-footer">
+              <button type="button" class="btn btn-primary btn-enroll" aria-label="Đăng ký môn IT009">
+                + Đăng ký môn
+              </button>
+            </div>
+          </article>
+
+          <!-- Môn 10 -->
+          <article 
+            class="course-card"
+            data-id="IT010"
+            data-name="Điện toán Đám mây (Cloud Computing)"
+            data-credits="3"
+            data-prereq="Mạng máy tính (IT008)"
+            data-schedule="Thứ 6 (Tiết 6-8)"
+            data-tuition="1350000"
+          >
+            <div class="course-card-header">
+              <span class="course-code-badge">IT010</span>
+              <span class="course-credits-badge">3 Tín chỉ</span>
+            </div>
+            <div class="course-card-body">
+              <h3 class="course-title">Điện toán Đám mây (Cloud Computing)</h3>
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Mạng máy tính (IT008)
+              </p>
+              <p class="course-meta course-schedule">
+                <span class="meta-label">Lịch học:</span> Thứ 6 (Tiết 6-8) - Phòng Lab 1
+              </p>
+              <p class="course-meta course-tuition">
+                <span class="meta-label">Học phí:</span> <strong>1.350.000 ₫</strong>
+              </p>
+            </div>
+            <div class="course-card-footer">
+              <button type="button" class="btn btn-primary btn-enroll" aria-label="Đăng ký môn IT010">
+                + Đăng ký môn
+              </button>
+            </div>
+          </article>
+
+          <!-- Môn 11 -->
+          <article 
+            class="course-card"
+            data-id="IT011"
+            data-name="Hệ thống Nhúng & IoT"
+            data-credits="3"
+            data-prereq="Kiến trúc Máy tính (IT012)"
+            data-schedule="Thứ 7 (Tiết 1-3)"
+            data-tuition="1350000"
+          >
+            <div class="course-card-header">
+              <span class="course-code-badge">IT011</span>
+              <span class="course-credits-badge">3 Tín chỉ</span>
+            </div>
+            <div class="course-card-body">
+              <h3 class="course-title">Hệ thống Nhúng & IoT</h3>
+              <p class="course-meta course-prereq">
+                <span class="meta-label">Tiên quyết:</span> Kiến trúc Máy tính (IT012)
+              </p>
+              <p class="course-meta course-schedule">
+                <span class="meta-label">Lịch học:</span> Thứ 7 (Tiết 1-3) - Phòng Lab IoT
+              </p>
+              <p class="course-meta course-tuition">
+                <span class="meta-label">Học phí:</span> <strong>1.350.000 ₫</strong>
+              </p>
+            </div>
+            <div class="course-card-footer">
+              <button type="button" class="btn btn-primary btn-enroll" aria-label="Đăng ký môn IT011">
+                + Đăng ký môn
+              </button>
+            </div>
+          </article>
+
+          <!-- Môn 12: 2 Tín chỉ, không có môn tiên quyết -->
+          <article 
+            class="course-card"
+            data-id="IT012"
+            data-name="Quản lý Dự án Công nghệ Thông tin"
+            data-credits="2"
+            data-prereq="Không có"
+            data-schedule="Thứ 7 (Tiết 6-7)"
+            data-tuition="900000"
+          >
+            <div class="course-card-header">
+              <span class="course-code-badge">IT012</span>
+              <span class="course-credits-badge">2 Tín chỉ</span>
+            </div>
+            <div class="course-card-body">
+              <h3 class="course-title">Quản lý Dự án Công nghệ Thông tin</h3>
+              <p class="course-meta course-prereq is-none">
+                <span class="meta-label">Tiên quyết:</span> Không có
+              </p>
+              <p class="course-meta course-schedule">
+                <span class="meta-label">Lịch học:</span> Thứ 7 (Tiết 6-7) - Phòng A301
+              </p>
+              <p class="course-meta course-tuition">
+                <span class="meta-label">Học phí:</span> <strong>900.000 ₫</strong>
+              </p>
+            </div>
+            <div class="course-card-footer">
+              <button type="button" class="btn btn-primary btn-enroll" aria-label="Đăng ký môn IT012">
+                + Đăng ký môn
+              </button>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Trạng thái rỗng khi tìm kiếm không có kết quả -->
+        <div id="empty-search-state" class="catalog-empty-state" hidden>
+          <div class="empty-icon" aria-hidden="true">🔎</div>
+          <h3>Không tìm thấy môn học phù hợp</h3>
+          <p>Thử đổi từ khóa tìm kiếm hoặc chọn lại mức số tín chỉ khác nhé.</p>
+          <button type="button" id="empty-reset-btn" class="btn btn-primary">
+            Hiển thị lại tất cả môn học
+          </button>
         </div>
       </section>
       <!-- ================================================================ -->
