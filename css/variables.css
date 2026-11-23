@@ -1,0 +1,663 @@
+/**
+ * ==============================================================================
+ * DỰ ÁN CUỐI KỲ: THIẾT KẾ WEB - LỚP 25CT111
+ * ĐỀ TÀI 2.1.2: CỔNG ĐĂNG KÝ MÔN HỌC THÔNG MINH (SMART ENROLLMENT PORTAL)
+ * FILE: css/variables.css
+ * PHỤ TRÁCH: Đinh Hữu Phước (MSSV: 125000155 - Nhóm trưởng / Leader)
+ * MÔ TẢ: Hệ biến giao diện chuẩn (:root), Reset CSS, Header sinh viên, 
+ *        Bố cục 2 cột .portal-layout (Desktop 1.35fr 1fr / Responsive 992px),
+ *        và Footer ghi danh 3 thành viên nhóm.
+ * ==============================================================================
+ */
+
+/* ==========================================================================
+   1. HỆ THỐNG BIẾN TOÀN CỤC (:ROOT DESIGN SYSTEM)
+   Dùng chung cho cả nhóm (Phước - Phát - Điền) đảm bảo đồng nhất giao diện
+   ========================================================================== */
+:root {
+  /* --- Bảng màu chủ đạo (Brand & Identity) --- */
+  --color-primary: #1e40af;            /* Xanh dương đậm chủ đạo (Indigo/Blue 800) */
+  --color-primary-hover: #1d4ed8;      /* Xanh dương khi hover (Blue 700) */
+  --color-primary-dark: #172554;       /* Xanh dương thẫm (Blue 950) */
+  --color-primary-light: #eff6ff;      /* Nền xanh nhạt (Blue 50) */
+  --color-primary-border: #bfdbfe;     /* Viền xanh nhạt (Blue 200) */
+
+  --color-secondary: #0f766e;          /* Xanh mòng két tạo điểm nhấn (Teal 700) */
+  --color-secondary-hover: #115e59;
+  --color-secondary-light: #f0fdfa;
+
+  --color-accent: #f59e0b;             /* Vàng cam tạo điểm chú ý (Amber 500) */
+  --color-accent-hover: #d97706;
+
+  /* --- Màu trạng thái học vụ (Status & Feedback) --- */
+  /* Thành công / Đã đăng ký */
+  --color-success: #16a34a;            /* Xanh lá (Green 600) */
+  --color-success-bg: #f0fdf4;         /* Nền xanh lá nhạt (Green 50) */
+  --color-success-border: #bbf7d0;     /* Viền xanh lá (Green 200) */
+  --color-success-text: #15803d;
+
+  /* Cảnh báo (>= 20 tín chỉ / Sắp hết slot / Trùng lịch) */
+  --color-warning: #ea580c;            /* Cam đậm cảnh báo (Orange 600) */
+  --color-warning-bg: #fff7ed;         /* Nền cam nhạt (Orange 50) */
+  --color-warning-border: #fed7aa;     /* Viền cam (Orange 200) */
+  --color-warning-text: #9a3412;
+
+  /* Lỗi / Vượt quá 25 tín chỉ (Danger / Exceeded) */
+  --color-danger: #dc2626;             /* Đỏ tươi (Red 600) */
+  --color-danger-hover: #b91c1c;       /* Đỏ thẫm khi hover */
+  --color-danger-bg: #fef2f2;          /* Nền đỏ nhạt (Red 50) */
+  --color-danger-border: #fecaca;      /* Viền đỏ (Red 200) */
+  --color-danger-text: #991b1b;
+
+  /* Thông tin bổ trợ (Info) */
+  --color-info: #0284c7;               /* Xanh trời (Sky 600) */
+  --color-info-bg: #f0f9ff;
+  --color-info-border: #bae6fd;
+  --color-info-text: #0369a1;
+
+  /* --- Màu bề mặt và nền (Surfaces & Backgrounds) --- */
+  --color-bg-page: #f8fafc;            /* Nền toàn trang (Slate 50) */
+  --color-bg-surface: #ffffff;         /* Nền thẻ, modal, khối nội dung */
+  --color-bg-alt: #f1f5f9;             /* Nền phụ xen kẽ (Slate 100) */
+  --color-bg-hover: #e2e8f0;           /* Màu hover vùng xám */
+
+  /* --- Màu chữ (Typography Colors) --- */
+  --color-text-main: #0f172a;          /* Màu chữ đen nhánh chuẩn (Slate 900) */
+  --color-text-muted: #475569;         /* Màu chữ phụ / mô tả (Slate 600) */
+  --color-text-light: #94a3b8;         /* Chữ mờ / placeholder (Slate 400) */
+  --color-text-white: #ffffff;         /* Chữ trắng trên nền tối */
+
+  /* --- Màu đường viền (Borders) --- */
+  --color-border: #e2e8f0;             /* Viền mặc định (Slate 200) */
+  --color-border-hover: #cbd5e1;       /* Viền khi tương tác (Slate 300) */
+  --color-border-focus: #3b82f6;       /* Viền khi focus (Blue 500) */
+
+  /* --- Bo góc (Border Radii) --- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+
+  /* --- Hiệu ứng đổ bóng (Box Shadows) --- */
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-card-hover: 0 12px 20px -3px rgba(15, 23, 42, 0.12);
+
+  /* --- Thời gian chuyển động (Transitions) --- */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease-in-out;
+  --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Khoảng cách (Spacing Scale) --- */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 0.75rem;   /* 12px */
+  --spacing-lg: 1rem;      /* 16px */
+  --spacing-xl: 1.5rem;    /* 24px */
+  --spacing-2xl: 2rem;     /* 32px */
+  --spacing-3xl: 2.5rem;   /* 40px */
+
+  /* --- Phông chữ & Kích cỡ --- */
+  --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  --font-size-xs: 0.75rem;     /* 12px */
+  --font-size-sm: 0.875rem;    /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;    /* 18px */
+  --font-size-xl: 1.25rem;     /* 20px */
+  --font-size-2xl: 1.5rem;     /* 24px */
+
+  /* --- Thứ tự hiển thị lớp (Z-index scale) --- */
+  --z-header: 100;
+  --z-dropdown: 200;
+  --z-sticky: 300;
+  --z-modal-backdrop: 900;
+  --z-modal: 1000;
+  --z-toast: 1100;
+}
+
+/* ==========================================================================
+   2. RESET CSS & TYPOGRAPHY CHUẨN HÓA
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: 1.55;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-page);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   3. HEADER HỆ THỐNG: THÔNG TIN SINH VIÊN, LỚP, GIỚI HẠN 25 TC
+   ========================================================================== */
+.portal-header {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+  color: var(--color-text-white);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+}
+
+.portal-header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}
+
+.portal-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.portal-logo-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fbbf24;
+  box-shadow: var(--shadow-sm);
+}
+
+.portal-title-group h1 {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+
+.portal-title-group p {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.82);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* Khối thông tin sinh viên & Giới hạn tín chỉ */
+.portal-student-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.student-card-badge {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.student-card-badge .badge-icon {
+  color: #38bdf8;
+}
+
+.student-card-badge strong {
+  color: #ffffff;
+}
+
+.student-card-badge .badge-role {
+  background: #f59e0b;
+  color: #78350f;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+}
+
+.credit-limit-badge {
+  background: rgba(254, 240, 138, 0.18);
+  border: 1px solid rgba(253, 224, 71, 0.45);
+  color: #fef08a;
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.credit-limit-badge span.limit-number {
+  background: #f59e0b;
+  color: #1c1917;
+  padding: 1px 7px;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+}
+
+/* ==========================================================================
+   4. BỐ CỤC CHÍNH 2 CỘT (.PORTAL-LAYOUT)
+   Desktop: 1.35fr (Cột Phát - Tìm kiếm & Môn học) / 1fr (Cột Điền - Giỏ & Bảng)
+   Dưới 992px: Tự động xuống 1 cột
+   ========================================================================== */
+.portal-main {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.portal-layout {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
+/* Responsive: Thu gọn thành 1 cột trên màn hình vừa và nhỏ (< 992px) */
+@media (max-width: 992px) {
+  .portal-layout {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  .portal-header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Khối Panel bọc ngoài mỗi cột */
+.portal-panel {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-normal);
+}
+
+.portal-panel:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.portal-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--color-bg-alt);
+  padding-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.portal-panel-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.portal-panel-title .title-icon {
+  color: var(--color-primary);
+}
+
+/* ==========================================================================
+   5. CÁC THÀNH PHẦN GIAO DIỆN CHUNG (COMMON UI COMPONENTS)
+   Phát và Điền có thể kế thừa hoặc tinh chỉnh trong catalog.css & table-responsive.css
+   ========================================================================== */
+
+/* Nút bấm (Button Presets) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-danger-outline {
+  color: var(--color-danger);
+  border-color: var(--color-danger-border);
+  background-color: transparent;
+}
+
+.btn-danger-outline:hover {
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger);
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: var(--color-text-white);
+}
+
+.btn-success:hover {
+  background-color: #15803d;
+}
+
+.btn:disabled,
+.btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Thẻ trạng thái & Huy hiệu (Badges) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+}
+
+.badge-primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-border);
+}
+
+.badge-success {
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
+  border: 1px solid var(--color-success-border);
+}
+
+.badge-warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
+  border: 1px solid var(--color-warning-border);
+}
+
+.badge-danger {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
+  border: 1px solid var(--color-danger-border);
+}
+
+/* Hộp cảnh báo (Alert Boxes) */
+.alert {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.45;
+}
+
+.alert-danger {
+  background-color: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  color: var(--color-danger-text);
+}
+
+.alert-warning {
+  background-color: var(--color-warning-bg);
+  border: 1px solid var(--color-warning-border);
+  color: var(--color-warning-text);
+}
+
+.alert-info {
+  background-color: var(--color-info-bg);
+  border: 1px solid var(--color-info-border);
+  color: var(--color-info-text);
+}
+
+/* Thanh tiến độ tín chỉ (.credit-progress-container) */
+.credit-progress-container {
+  margin: var(--spacing-md) 0;
+}
+
+.credit-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+}
+
+.credit-progress-track {
+  width: 100%;
+  height: 12px;
+  background-color: var(--color-bg-alt);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.credit-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: var(--radius-pill);
+  transition: width var(--transition-smooth), background var(--transition-normal);
+}
+
+/* Trạng thái thanh tiến độ theo logic của Phước */
+.credit-progress-fill.is-warning {
+  background: linear-gradient(90deg, #f59e0b 0%, #ea580c 100%);
+}
+
+.credit-progress-fill.is-full {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.credit-status-caption {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   6. FOOTER TRANG TRỌNG GHI ĐỦ TÊN 3 THÀNH VIÊN
+   ========================================================================== */
+.portal-footer {
+  background-color: #0b1329;
+  color: #94a3b8;
+  padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg);
+  margin-top: auto;
+  border-top: 1px solid #1e293b;
+}
+
+.portal-footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-top-row {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr;
+  gap: var(--spacing-2xl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 868px) {
+  .footer-top-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+}
+
+.footer-project-info h2 {
+  color: #ffffff;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-xs);
+}
+
+.footer-project-info p {
+  font-size: var(--font-size-sm);
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.footer-members-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 680px) {
+  .footer-members-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.member-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  transition: all var(--transition-fast);
+}
+
+.member-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+}
+
+.member-card .member-role {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.member-card.is-leader .member-role {
+  background: #f59e0b;
+  color: #451a03;
+}
+
+.member-card.is-member .member-role {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+.member-card h3 {
+  color: #f8fafc;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.member-card .member-id {
+  font-size: var(--font-size-xs);
+  color: #38bdf8;
+  font-family: var(--font-family-mono);
+  margin-bottom: 4px;
+}
+
+.member-card .member-task {
+  font-size: 0.725rem;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+.footer-bottom-row {
+  padding-top: var(--spacing-lg);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-xs);
+  color: #64748b;
+  gap: var(--spacing-sm);
+}
+
+.footer-tech-stack {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.footer-tech-badge {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
